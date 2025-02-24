@@ -1,0 +1,32 @@
+===DOC ROOT Folders===
+/home/indepthr/public_html/
+########################################################
+===Links List===
+/home/indepthr/public_html/vendor/bin/doctrine-dbal
+/home/indepthr/public_html/vendor/bin/phpunit
+/home/indepthr/public_html/vendor/bin/carbon
+/home/indepthr/public_html/vendor/bin/google-cloud-batch
+/home/indepthr/public_html/vendor/bin/commonmark
+/home/indepthr/public_html/vendor/bin/php-parse
+/home/indepthr/public_html/vendor/bin/psysh
+/home/indepthr/public_html/vendor/bin/var-dump-server
+########################################################
+===ALLOW List===
+########################################################
+===ImunifyAV Check List===
+
+########################################################
+===Maldet Check List===
+########################################################
+===GREP check List===
+./datalab/wp-includes/js/underscore.js
+./webinars/wp-includes/js/underscore.js
+./blog/wp-includes/js/underscore.js
+./vendor/fzaninotto/faker/src/Faker/Provider/nl_NL/Person.php
+./vendor/fzaninotto/faker/src/Faker/Provider/nb_NO/Person.php
+./old/libraries/regularlabs/src/Uri.php
+./old/media/editors/codemirror/mode/asn.1/asn.min.js
+./old/media/editors/codemirror/mode/asn.1/asn.1.js
+########################################################
+===Image Check List===
+########################################################

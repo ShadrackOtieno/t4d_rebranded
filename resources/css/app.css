@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* If using app.css */
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+
+@layer components {
+    .ires-primary-btn {
+      @apply bg-[#0096FF] text-white py-4 px-8 rounded-full w-max cursor-pointer transition-all duration-500;
+      &:hover{
+        @apply bg-[#0096FF];
+      }
+    }
+    .ires-secondary-btn {
+      @apply bg-[#0096FF] text-white py-4 px-8 rounded-full border-2 border-[#0096FF] w-max cursor-pointer transition-all duration-500;
+      &:hover{
+        @apply bg-transparent text-[#0096FF];
+      }
+    }
+    .ires-pri-btn{
+      @apply bg-[#0096FF] text-white rounded-full w-max cursor-pointer transition-all duration-500;
+      &:hover{
+        @apply bg-[#0096FF];
+      }
+    }
+    .ires-sec-btn {
+      @apply bg-[#0096FF] text-white rounded-full border-2 border-[#0096FF] w-max cursor-pointer transition-all duration-500;
+      &:hover{
+        @apply bg-transparent text-[#0096FF];
+      }
+    }
+    ol{
+      @apply list-decimal;
+    }
+    ul{
+      @apply list-disc;
+    }
+}

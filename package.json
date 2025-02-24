@@ -1,0 +1,31 @@
+{
+  "name": "t4d_rebranded",
+  "version": "1.0.0",
+  "description": "<p align=\"center\"><img src=\"https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg\" width=\"400\"></p>",
+  "main": "postcss.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tailwindcss -i ./resources/css/app.css -o ./public/src/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Indepth-Research-Institute-IRES/IRES.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Indepth-Research-Institute-IRES/IRES/issues"
+  },
+  "homepage": "https://github.com/Indepth-Research-Institute-IRES/IRES#readme",
+  "dependencies": {
+    "npm": "^11.1.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

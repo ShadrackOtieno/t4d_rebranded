@@ -1,0 +1,87 @@
+@extends('backoffice.master')
+
+@section('title', 'Review Details')
+
+@section('content')
+    <section class="content">
+        <div class="container-fluid">
+
+            <!-- Start -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header clearfix">
+                            <h2 class="pull-left">
+                                REVIEW DETAILS
+                            </h2>
+
+                            <a href="{{ route('backoffice.review.index') }}" class="pull-right">
+                                Back to reviews
+                            </a>
+                        </div>
+
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+
+                                    <div class="form-group">
+                                        <label>Customer</label>
+
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" value="{{ $review->customer->name }}" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Rating</label>
+
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" value="{{ $review->rating }}" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Service Type</label>
+
+                                        @php
+                                            switch ($review->item_type) {
+
+                                                case 'App\Tour':
+                                                    $service_type = 'Tour';
+                                                    break;
+
+                                                case 'App\Course':
+                                                    $service_type = 'Course';
+                                                    break;
+                                            }
+                                        @endphp
+
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" value="{{ $service_type }}" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Service Name</label>
+
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" value="{{ $review->item->name }}" disabled>
+                                        </div>
+                                    </div>
+
+                                    <h4>Comment</h4>
+
+                                    <p>
+                                        {{ $review->comment }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END#  -->
+            
+        </div>
+    </section>
+@endsection

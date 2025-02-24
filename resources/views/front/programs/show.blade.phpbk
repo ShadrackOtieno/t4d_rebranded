@@ -1,0 +1,1250 @@
+@extends('front.master')
+
+@section('content')
+    <style>
+        @media (min-width: 1201px) {
+            .tabs-mobile {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .tabs-desktop {
+                display: none;
+
+            }
+        }
+
+        .tab-button.outline-inactive {
+            border: 2px solid #198783;
+            /* Outline for inactive tabs indicating an image */
+            background-color: #f8f9fa;
+            /* Light background to differentiate */
+            color: #198783;
+        }
+
+        .tab-button:hover {
+            background-color: #a11e22;
+            color: #f4f4f4
+        }
+
+        .tab-buttons {
+            gap: 10px;
+            margin-bottom: 5px
+        }
+        .img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.fit-image {
+    object-fit: cover; 
+    width: 100%; 
+    height: 70%;
+    
+}
+
+    </style>
+
+
+
+
+    <style>
+        /* Custom CSS for floating navigation */
+        .floating-nav {
+            display: none;
+            /* Hide by default */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #a11e22;
+            color: white;
+            padding: 10px 0;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-nav .nav-item {
+            flex: 1;
+            text-align: center;
+            color: white;
+        }
+
+        /* Show floating navigation on small screens */
+        @media (max-width: 768px) {
+            .floating-nav {
+                display: flex;
+            }
+
+            .scroll_menu {
+                display: none;
+                /* Hide the original menu */
+            }
+        }
+
+        /* @media (min-width: 1201px) {
+       .tabs-mobile {
+        display: none;
+       }
+      }
+     
+      @media (max-width: 1200px) {
+       .tabs-desktop {
+        display: none;
+     
+       }
+      } */
+
+        .table {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-header,
+        .table-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-row {
+            display: flex;
+            width: 100%;
+        }
+
+        .table-cell {
+            flex: 1;
+            padding: 2px;
+            border: 1px solid #f4f4f4;
+            box-sizing: border-box;
+        }
+
+        .table-header .table-cell {
+            font-weight: bold;
+            background-color: #f4f4f4;
+        }
+
+        @media (max-width: 600px) {
+            .table-row {
+                flex-direction: row;
+                font-size: 12px;
+            }
+
+            .table-cell {
+                border: none;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .table-cell:last-child {
+                border-bottom: none;
+            }
+        }
+
+        .tab-button.outline-inactive {
+            border: 2px solid #198783;
+            /* Outline for inactive tabs indicating an image */
+            background-color: #f8f9fa;
+            /* Light background to differentiate */
+            color: #198783;
+        }
+
+        .tab-button:hover {
+            background-color: #a11e22;
+            color: #f4f4f4
+        }
+
+        .tab-buttons {
+            gap: 10px;
+            margin-bottom: 5px
+        }
+    </style>
+    <div class="main-body">
+
+        <div class="intake-program wrap-feature40-box py-5" id="enroll">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h1 class="text-uppercase">{{ ucfirst($program->name) }}</h1>
+                        <p class="py-2">
+                            {{--
+					<p>{!! $program->introduction !!}</p> --}}
+
+
+
+                            The ‘Monitoring and Evaluation (M&E)’ course is a comprehensive program that covers the
+                            standards and procedures for results-based monitoring and evaluation for end-to-end project
+                            lifecycles.
+                            for results-based monitoring and evaluation for end-to-end project
+                            lifecycles.
+
+                        </p>
+
+                        <p class="cta-paragraph">
+                            @foreach ($program->prices as $price)
+                                <span style="color: #1c9793;font-weight:500">{{ $price->learning_mode }} classes </span><span
+                                    style="color: #1b918e; font-weight:bold">|</span>
+                                <span style="font-weight:400">
+                                    {{ $program->intakes->where('start_date', '>=', now())->first()->duration ?? 0 }}
+                                    Week(s)</span> <span style="color: #1b918e; font-weight:700"> |</span>
+                                <span style="color: #1ea19d; font-weight:400">
+                                    FEE: Ksh <strong>{{ $price->ksh }}</strong> / USD
+                                    <strong>{{ $price->usd }}</strong></span>
+                            @endforeach
+                        </p>
+
+
+
+                        <a class="btn bc-btn btn-primary rounded-pill py-3 fs-6 mr-2"
+                            href="{{ route('programs.register', $program->slug) }}"
+                            style="font-size: 1.125rem; line-height: 1.75rem; padding: 1rem 2rem; border-radius:999px; font-weight: 900"><span id="#enroll">APPLY
+                                NOW</a>
+                        <button type="button" class="btn bc-btn btn-outline-primary rounded-pill py-3 fs-6 m-0"
+                            data-toggle="modal" data-target="#staticBackdrop"
+                            style="font-size: 1.125rem; line-height: 1.75rem; font-weight:700; padding:1rem 2rem;">Download
+                            Brochure</button>
+                        <div class="py-4">
+
+                            <p><b><span style="color:#a11e22"> Application Deadline:</span></b>
+                                {{ \Carbon\Carbon::parse(
+                                    $program->intakes->where('start_date', '>=', now())->first()->start_date ?? now(),
+                                )->isoFormat('Do MMMM YYYY') }}
+                            </p>
+                        </div>
+
+
+                        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
+                            tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="text-right">
+                                            <i class="fa fa-close close" data-dismiss="modal"></i>
+                                        </div>
+
+
+                                        <div class="contact3">
+                                            <div class="row no-gutters">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="card-shadow">
+                                                                <img src="https://www.wrappixel.com/demos/ui-kit/wrapkit/assets/images/contact/2.jpg"
+                                                                    class="img-fluid">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="contact-box">
+                                                                <h4 class="font-weight-light">Get your Brochure Copy</h4>
+                                                                <form>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12">
+                                                                            <div class="form-group mt-2">
+                                                                                <input class="form-control" type="text"
+                                                                                    placeholder="Full Name" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="form-group mt-2">
+                                                                                <input class="form-control" type="email"
+                                                                                    placeholder="Email address" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="form-group mt-2">
+                                                                                <input class="form-control" type="text"
+                                                                                    placeholder="Phone" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        {{-- <div class="col-lg-12">
+																		<div class="form-group mt-2">
+																			<textarea class="form-control" rows="3"
+																				placeholder="message"></textarea>
+																		</div>
+																	</div> --}}
+                                                                        <div class="col-lg-12">
+                                                                            <p><strong> Application Closes on:
+
+                                                                                    {{ \Carbon\Carbon::parse(
+                                                                                        $program->intakes->where('start_date', '>=', now())->first()->start_date ?? now(),
+                                                                                    )->isoFormat('Do MMMM YYYY') }}
+                                                                                </strong>
+
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <button type="submit"
+                                                                                class="btn btn-danger-gradiant mt-3 text-white border-0 px-3 py-2"><span>
+                                                                                    Download Brochure</span></button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- <div class="row">
+										<div class="col-md-6">
+											<div class="text-center mt-2">
+												<img src="https://i.imgur.com/3dG6dJo.jpg" width="200">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="mt-0">
+												<h1 class="mb-0">Get your Brochure Copy</h1>
+												<span class="intro-1">Take your writing to the next level</span>
+												<div class="mt-4">
+													<span class="intro-2">Gain access to analytic tools, desktop apps,
+														templates, read-through features, and auto-translate all for the
+														price of a pro subscription</span>
+												</div>
+												<div class="mt-4 mb-5">
+													<button class="btn btn-primary">25% off premium <i
+															class="fa fa-long-arrow-right"></i></button>
+												</div>
+											</div>
+										</div>
+									</div> --}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- end --}}
+
+
+
+
+                    </div>
+                    <div class="col-lg-4">
+                        <img src="{{ asset ('images/programs/' .$program->cover) }}" alt="{{ $program->name }}" class="img-fluid fit-image">
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="cta-programs">
+            <div class="intake-apply-container container">
+                <h2 style="color: #fff; text-align:center">Upskill Today with our {!! $program->name !!}</h2>
+                {{-- <p>
+				{{ \Carbon\Carbon::parse(
+				$program->intakes->where('start_date', '>=', now())->first()->start_date ?? now(),
+				)->isoFormat('Do MMMM YYYY') }}
+				Intake is ongoing</p>
+			<a class="btn bc-btn btn-primary-outline rounded-pill px-5 fs-6 m-0"
+				href="{{ route('programs.register', $program->slug) }}"
+				style="border-radius:5%; border-color:#fff; color:#fff; font-size:25px; padding: 10px">
+				<span>APPLY NOW</span>
+			</a> --}}
+
+
+            </div>
+
+
+        </div>
+
+
+        <div id="scroll_app_menu" class="solution-tabs scroll_menu z-5 bg-white border-top border-bottom">
+            <div class="container">
+                <nav class="nav navbar flex-nowrap bg-white w-100 d-flex h-10 justify-content-start border-0 pb-0">
+                    <a class="nav-link-taps rounded-pill px-4 fs-5 m-0 active" href="#enroll">Register Now</a>
+                    <a class="nav-link-taps rounded-pill px-4 fs-5 m-0" href="#about-program">About</a>
+                    <a class="nav-link-taps rounded-pill px-4 fs-5 m-0" href="#overview">Overview</a>
+                    <a class="nav-link-taps rounded-pill px-4 fs-5 m-0" href="#prerequisites">Prerequisites</a>
+                    <a class="nav-link-taps rounded-pill px-4 fs-5 m-0" href="#modules">Modules</a>
+                    <a class="nav-link-taps rounded-pill px-4 fs-5 m-0" href="#experience">Experience</a>
+                </nav>
+            </div>
+            {{-- <span></span> --}}
+        </div>
+
+
+        <!-- Floating Navigation for Mobile -->
+        <nav class="floating-nav navbar navbar-expand navbar-light">
+            <a class="nav-item nav-link" href="#enroll">
+                <i class="fas fa-clipboard-check"></i>
+                <span class="d-block">Register</span>
+            </a>
+            <a class="nav-item nav-link" href="#about-program">
+                <i class="fas fa-info-circle"></i>
+                <span class="d-block">Details</span>
+            </a>
+            <a class="nav-item nav-link" href="#Overview">
+                <i class="fas fa-list-alt"></i>
+                <span class="d-block">Overview</span>
+            </a>
+         
+			<a class="nav-item nav-link" href="#modules">
+                <i class="fas fa-cogs"></i>
+                <span class="d-block">Modules</span>
+            </a>
+        </nav>
+
+
+
+        {{-- modules section --}}
+        <div class="container program-section py-5">
+            {{-- <div class="about-program" id="about-program">
+                <div class="program-header text-left">
+                    <h2 class="about-header">About Program</h2>
+
+                </div>
+                <p>{!! $program->about !!}</p>
+
+            </div> --}}
+
+            <div class="row w-100">
+                <div class="col-md-4">
+                    <div class="card border-info mx-sm-1 p-3">
+                        <div class="card border-info shadow text-info p-3 my-card" style="background-color: #1b918e">
+                            <span class="fa fa-dollar" aria-hidden="true" style="color: #fff"></span>
+                        </div>
+                      
+                        <div class="text-info text-center mt-2">
+                            <h4>Program Fee</h4>
+                            <p>
+                                @foreach ($program->prices as $price)
+                                    {{ $price->ksh }} / USD
+                                    {{ $price->usd }}
+                                @endforeach
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-success mx-sm-1 p-3">
+                        <div class="card border-success shadow text-success p-3 my-card" style="background-color: #000">
+                            <span class="fa fa-calendar-times-o" aria-hidden="true" style="color: #fff"></span>
+                        </div>
+                        {{-- <div class="text-success text-center mt-3">
+						<h4>Eyes</h4>
+					</div> --}}
+                        <div class="text-success text-center mt-2">
+                            <h4>Duration</h4>
+
+                            <p>{{ $program->intakes->where('start_date', '>=', now())->first()->duration ?? 0 }} Week(s)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-danger mx-sm-1 p-3">
+                        <div class="card border-danger shadow text-danger p-3 my-card" style="background-color: #a11e22">
+                            <span class="fa fa-video-camera" aria-hidden="true" style="color: #fff"></span>
+                        </div>
+                        {{-- <div class="text-danger text-center mt-3">
+						<h4>Hearts</h4>
+					</div> --}}
+                        <div class="text-danger text-center mt-2">
+                            <h4>
+                                Study Mode
+                            </h4>
+                            <p>Virtual classes</p>
+                            {{-- <p>@foreach ($program->prices as $price)
+							{{ $price->learning_mode }} classes
+							@endforeach</p> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- new feature --}}
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+
+        {{-- program overviw --}}
+        <div class="bg-light py-5" id="overview">
+
+            <div class="container program-section ">
+                <div class="program-header">
+                    <h2></h2>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-7">
+                        <h2>Enhance your skills with our {!! $program->name !!} in
+                            {{ $program->intakes->where('start_date', '>=', now())->first()->duration ?? 0 }} Week(s)</h2>
+                        <div class="ip-brief-desc" id="subcategory-description">
+                            @php
+                                $description = $program->description;
+                                $shortDescription = Str::words(strip_tags($description), 100, '...');
+                            @endphp
+
+                            @if (str_word_count(strip_tags($description)) > 10)
+                                <div>
+                                    <span id="short-description">{!! $shortDescription !!}</span>
+                                    <span id="full-description" style="display: none;">{!! $description !!}</span>
+                                    <a href="javascript:void(0);" id="show-more"
+                                        style="cursor: pointer; color: #1ea19d;">Show
+                                        More</a>
+                                    <a href="javascript:void(0);" id="show-less"
+                                        style="display: none; cursor: pointer; color: #1ea19d;">Show Less</a>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="py-5">
+
+                            <a class="btn bc-btn btn-primary rounded-pill py-3 fs-6 mr-2"
+                                href="{{ route('programs.register', $program->slug) }}"
+                                style="font-size: 1.125rem; line-height: 1.75rem; padding: 1rem 2rem; border-radius:999px; font-weight: 900"><span>Get
+                                    Started</a>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            
+                            <div class="panel panel-default">
+                                <div id="headingOne" role="tab">
+                                    <h3 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                            href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+                                            class="">
+                                            Who Should Attend?
+                                        </a>
+                                    </h3>
+                                    <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel"
+                                        aria-labelledby="headingOne">
+                                        <p>{!! $program->participants !!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div id="headingTwo" role="tab">
+                                    <h3 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse"
+                                            data-parent="#accordion" href="#collapseTwo" aria-expanded="false"
+                                            aria-controls="collapseTwo">
+                                            Program Objectives
+                                        </a>
+                                    </h3>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                                        aria-labelledby="headingTwo">
+                                        <p>{!! $program->objective !!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div id="headingTwo" role="tab">
+                                    <h3 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse"
+                                            data-parent="#accordion" href="#collapseTwo" aria-expanded="false"
+                                            aria-controls="collapseTwo">
+                                            Program Methodology
+                                        </a>
+                                    </h3>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                                        aria-labelledby="headingTwo">
+                                        <p>{!! $program->methodology !!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div id="headingThree" role="tab">
+                                    <h3 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse"
+                                            data-parent="#accordion" href="#collapseThree" aria-expanded="false"
+                                            aria-controls="collapseThree">
+                                            Learning Outcomes
+                                        </a>
+                                    </h3>
+                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+                                        aria-labelledby="headingThree">
+                                        <p>{!! $program->outcomes !!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="program-bronchure-cta">
+            <div class="container py-4">
+                <div class="icon-circle">
+                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <h2 class="text-white">Elevate your skills with our {!! $program->name !!} today </h2>
+                </div>
+
+            </div>
+        </div>
+        <div class="py-5 service-22 my-5" id="prerequisites">
+            <div class="container">
+                <!-- Row -->
+                <div class="row wrap-service-22">
+                    <!-- Column -->
+                    <div class="col-lg-6">
+                        <img src="{{ asset('front/assets/img/programs-prerequisite.jpg') }}"
+                            class="rounded img-shadow img-fluid" alt="wrapkit" />
+                    </div>
+                    <!-- Column -->
+                    <div class="col-lg-6 mt-4 mt-md-0">
+                        <div class="text-box">
+                            <div class="text-left">
+                                <h2 class="mt-2 mb-4 text-left">
+                                    Program Prerequisites
+                                </h2>
+                            </div>
+                            <div class="py-3">
+                                {!! $program->prerequisite !!}
+                            </div>
+
+
+                            <div class="text-left">
+
+                                <button type="button" class="btn bc-btn btn-outline-primary rounded-pill py-3 fs-6 m-0"
+                                    data-toggle="modal" data-target="#staticBackdrop"
+                                    style="font-size: 1.125rem; line-height: 1.75rem; font-weight:700; padding:1rem 2rem;">Download
+                                    Brochure</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+            </div>
+        </div>
+        {{-- === modules=== --}}
+
+        <div class="modules-section bg-light text-center py-5" id="modules">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div>
+                            <h2>Program Modules
+                            </h2>
+                        </div>
+                    
+
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            @foreach ($program->modules as $key => $module)
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading{{ $key }}">
+                                        <h6 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                                href="#collapse{{ $key }}"
+                                                aria-expanded="{{ $key == 0 ? 'true' : 'false' }}"
+                                                aria-controls="collapse{{ $key }}"
+                                                class="{{ $key == 0 ? '' : 'collapsed' }}">
+                                                {{ $module->name }}
+                                            </a>
+                                        </h6>
+                                    </div>
+                                    <div id="collapse{{ $key }}"
+                                        class="panel-collapse collapse {{ $key == 0 ? 'show' : '' }}" role="tabpanel"
+                                        aria-labelledby="heading{{ $key }}">
+                                        <div class="panel-body">
+                                            {!! $module->description !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        {{-- certificate --}}
+        <div id="certificate">
+            <div class="container py-5 program-certificate text-center">
+                <div>
+                    <h2>Certificate of Completion</h2>
+                </div>
+                <p class="py-3">Upon successful course completion, participants will be awarded a
+                    certificate of program
+                    completion from Indepth
+                    Research Institute.</p>
+                {{-- <span class="bc-btn">
+				<a class="btn bc-btn btn-primary my-4" href="#" data-toggle="modal" data-target="#popBrochure">Download
+					Brochure</a>
+			</span> --}}
+                <div>
+                    <img src="{{ asset('front/assets/img/certificate.webp') }}">
+                </div>
+            </div>
+
+            <div class="py-5 my-5 intake-programs bg-light" id="experience">
+                <div class="container">
+
+                    <div class="text-center">
+                        <h2>
+                            The Program also Includes:
+                        </h2>
+
+                    </div>
+
+
+                    {{-- <div class="container"> --}}
+                    <div class="row application-section ">
+                        <div class="col-md-3">
+                            <a class="card1" href="#">
+                                <h3>Program Delivery</h3>
+                                <p class="small">Delivered via video lectures in form of zoom and google meet.</p>
+                                <div class="go-corner" href="#">
+                                    <div class="go-arrow">
+                                        →
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a class="card1" href="#">
+                                <h3>Real-World Examples</h3>
+                                <p class="small">Delivered through a combination of video and live online lectures. </p>
+                                <div class="go-corner" href="#">
+                                    <div class="go-arrow">
+                                        →
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a class="card1" href="#">
+                                <h3>Hands on Experience</h3>
+                                <p class="small">Learn through individual assignments and feedback.</p>
+                                <div class="go-corner" href="#">
+                                    <div class="go-arrow">
+                                        →
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a class="card1" href="#">
+                                <h3>Debrief of Learnings</h3>
+                                <p class="small">A combination of recorded and live video lectures.</p>
+                                <div class="go-corner" href="#">
+                                    <div class="go-arrow">
+                                        →
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Row  -->
+                    {{-- <div class="row">
+						<!-- Column -->
+						<div class="col-md-3 wrap-service6-box">
+							<div class="card border-0 bg-success-gradiant text-white mb-4">
+								<div class="card-body">
+									<h3 class="font-weight-medium text-white">Program Delivery</h3>
+									<p class="mt-3"> Delivered via video lectures in form of zoom and google meet.
+									</p>
+								</div>
+							</div>
+						</div>
+						<!-- Column -->
+						<!-- Column -->
+						<div class="col-md-3 wrap-service6-box">
+							<div class="card border-0 bg-info-gradiant text-white mb-4">
+								<div class="card-body">
+									<h3 class="font-weight-medium text-white">Real-World Examples</h3>
+									<p class="mt-3"> Delivered through a combination of video and live online lectures.
+									</p>
+								</div>
+							</div>
+						</div>
+						<!-- Column -->
+						<!-- Column -->
+						<div class="col-md-3 wrap-service6-box">
+							<div class="card border-0 bg-danger-gradiant text-white mb-4">
+								<div class="card-body">
+									<h3 class="font-weight-medium text-white">Applications to Data Sets</h3>
+									<p class="mt-3">Learn through individual assignments and feedback.
+									</p>
+								</div>
+							</div>
+						</div>
+						<!-- Column -->
+
+						<!-- Column -->
+						<div class="col-md-3 wrap-service6-box">
+							<div class="card border-0 bg-danger-gradiant text-white mb-4">
+								<div class="card-body">
+									<h3 class="font-weight-medium text-white">Debrief of Learnings</h3>
+									<p class="mt-3">A combination of recorded and live video lectures.
+									</p>
+								</div>
+							</div>
+						</div>
+						<!-- Column -->
+						<div class="col-md-12 mt-3 text-center">
+
+
+							<a class="btn bc-btn btn-primary rounded-pill py-3 fs-6 mr-2"
+								href="{{ route('programs.register', $program->slug) }}"
+								style="font-size: 1.125rem; line-height: 1.75rem; padding: 1rem 2rem; border-radius:999px; font-weight: 900"><span>APPLY
+									NOW</a>
+						</div>
+					</div> --}}
+                </div>
+            </div>
+            <div class="container">
+
+                <div class="text-left">
+                    <h2>
+                        Tools &amp; Technologies
+                    </h2>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+
+                       {{-- @if (optional($program->tools)->isNotEmpty())
+                            @foreach ($program->tools as $tool)
+                                <a href="{{ asset($tool->url) }}" target="_blank">
+                                    <img src="{{ asset($tool->url) }}" alt=""
+                                        style="width: 80px; height: 60px;">
+                                </a>
+                            @endforeach
+                        @else
+                            <p>No tools available.</p>
+                        @endif --}}
+
+                        {{-- <h6> {{ $program->tools }}</h6> --}}
+                    </div>
+
+                </div>
+
+
+                {{-- <div class="slider">
+					<div class="slide-track">
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/1.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/2.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/3.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/4.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/5.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/6.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/7.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/1.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/2.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/3.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/4.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/5.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/6.png" height="100" width="250"
+								alt="" />
+						</div>
+						<div class="slide">
+							<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/557257/7.png" height="100" width="250"
+								alt="" />
+						</div>
+					</div>
+				</div> --}}
+
+            </div>
+            <div class="programs-registrations bg-light">
+                <!-- <div class="container"> -->
+                <div class="container app_sect">
+                    <div>
+                        <h2>Application process</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card card-margin">
+
+                                <div class="card-body pt-0">
+                                    <div class="widget-49">
+                                        <div class="widget-49-title-wrapper">
+                                            <div class="widget-49-date-primary">
+                                                <span class="widget-49-date-day">1</span>
+                                            </div>
+                                            <div class="widget-49-meeting-info">
+                                                <span class="widget-49-pro-title">Register</span>
+                                            </div>
+                                        </div>
+                                        <p>Submit your <span style="color: #1a8c88"> <a
+                                                    href="{{ route('programs.register', $program->slug) }}">
+                                                    registration</a></span>
+                                            by filling in the form online </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-margin">
+                                <div class="card-body pt-0">
+                                    <div class="widget-49">
+                                        <div class="widget-49-title-wrapper">
+                                            <div class="widget-49-date-warning">
+                                                <span class="widget-49-date-day">2</span>
+                                                <!-- <span class="widget-49-date-month">apr</span> -->
+                                            </div>
+                                            <div class="widget-49-meeting-info">
+                                                <span class="widget-49-pro-title"> Make Payments</span>
+                                                <!-- <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span> -->
+                                            </div>
+                                        </div>
+                                        <p>
+                                            Receive Invoice upon registration and make payments
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-margin">
+                                <div class="card-body pt-0">
+                                    <div class="widget-49">
+                                        <div class="widget-49-title-wrapper">
+                                            <div class="widget-49-date-success">
+                                                <span class="widget-49-date-day">3</span>
+                                                <!-- <span class="widget-49-date-month">apr</span> -->
+                                            </div>
+                                            <div class="widget-49-meeting-info">
+                                                <span class="widget-49-pro-title">Join program
+                                                </span>
+                                                <!-- <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span> -->
+                                            </div>
+                                        </div>
+                                        <p>
+                                            Choose a mode of study and attend course
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div>
+                        <h2>Application process</h2>
+                    </div>
+
+                    <div class="row w-100">
+                        <div class="col-md-4">
+                            <div class="card h-50 border-info mx-sm-1 p-3">
+                                <div class="card  border-info shadow text-info p-3 my-card1"
+                                    style="background-color: #1b918e">
+                                    <span style="color: #fff;font-size: 30px">1</span>
+                                </div>
+                                {{-- <div class="text-info text-center mt-3">
+                                <h4>Cars</h4>
+                            </div> --}}
+                                <div class="text-info text-left mt-2" style="padding-left: 30px">
+                                    <h4 style="padding-left:50px">Select Course</h4>
+                                    <p style="color: #212529; padding-left:50px; padding-bottom: 50px">Choose a course and
+                                        <a href="{{ route('programs.register', $program->slug) }}">Register</a> online
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-50 border-success mx-sm-1 p-3">
+                                <div class="card  border-info shadow text-info p-3 my-card1"
+                                    style="background-color: #1b918e">
+                                    <span style="color: #fff;font-size: 30px">2</span>
+                                </div>
+                                {{-- <div class="text-success text-center mt-3">
+                                <h4>Eyes</h4>
+                            </div> --}}
+                                <div class="text-info text-left mt-2" style="padding-left: 30px">
+                                    <h4 style="padding-left:50px">Make Payments</h4>
+                                    <p style="color: #212529; padding-left:50px; padding-bottom: 50px">Receive Invoice upon
+                                        registration and make payments</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-50 border-danger mx-sm-1 p-3">
+                                <div class="card  border-info shadow text-info p-3 my-card1"
+                                    style="background-color: #1b918e">
+                                    <span style="color: #fff;font-size: 30px">3</span>
+                                </div>
+                                {{-- <div class="text-danger text-center mt-3">
+                                <h4>Hearts</h4>
+                            </div> --}}
+                                <div class="text-info text-left mt-2" style="padding-left: 30px">
+                                    <h4 style="padding-left:50px">Join program</h4>
+                                    <p style="color: #212529; padding-left:50px; padding-bottom: 50px">Choose a mode of
+                                        study (Weekend/Evening) and attend course
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="header">
+                                <h2> Register Now !! </h2>
+
+                            </div>
+                            <p>We're excited about our next cohort and can't wait to have you join us! Admissions close once
+                                we
+                                reach our participant limit, so make sure you apply early to save your spot! </p>
+                            <p>
+                                Deadline:
+                                <strong>
+                                    {{ \Carbon\Carbon::parse(
+                                        $program->intakes->where('start_date', '>=', now())->first()->start_date ?? now(),
+                                    )->isoFormat('Do MMMM YYYY') }}
+                                </strong>
+                            </p>
+
+
+                            <a class="btn bc-btn btn-primary rounded-pill py-3 fs-6 mr-2"
+                                href="{{ route('programs.register', $program->slug) }}"
+                                style="font-size: 1.125rem; line-height: 1.75rem; padding: 1rem 2rem; border-radius:999px; font-weight: 900">Get
+                                Started Now</a>
+                        </div>
+                        <div class="col-md-5 program-fee-section py-4 text-center">
+                            <h2>Program Fees</h2>
+                            <div class="cta-programs">
+                                <div class="program-fee">
+                                    <p class="text-center">
+                                        <strong style="color: #fff; text-align:center">
+                                            @foreach ($program->prices as $price)
+                                                {{ $price->ksh }} / USD
+                                                {{ $price->usd }}
+                                            @endforeach
+                                        </strong>
+
+                                    </p>
+                                    {{-- <a class="btn btn-outline-info btn-md btn-rounded border-0 text-brown"
+										href="{{ route('programs.register', $program->slug) }}"
+										style="border-radius:5%; border-color:brown;">
+										<span>Apply Now</span>
+									</a> --}}
+
+
+
+                                </div>
+
+
+
+                            </div>
+                            <h4 style="padding-top: 20px">We accept payments in:</h4>
+
+
+                            <div class="row payments-methods">
+                                <div class="col-md-3">
+                                    <img src="{{ asset('images/mpesa.webp') }}" alt="">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="{{ asset('images/paybal.webp') }}" alt="">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="{{ asset('images/master.webp') }}" alt="">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="{{ asset('images/visa.webp') }}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- call to action --}}
+
+                <div class="programs-cta py-5 bg-light">
+                    <div class="container">
+                        <!-- Row -->
+                        <div class="row justify-content-center">
+                            <div class="col-md-7 text-center programs-cta-texts">
+                                <h2 class="mb-3 text-white font-weight-medium">Interested in this Program?</h2>
+                                {{-- <p class="font-weight-bold text-white">Lorem ipsum dolor sit amet, consectetur
+									adipiscelit.
+									Nam malesu dolor sit amet, consectetur adipiscelit. consectetur adipiscelit. Nam malesu
+									dolor.
+								</p> --}}
+                                <p class="font-weight-medium text-white programs-text">Curious about how the program can
+                                    help
+                                    you reach your
+                                    goals? To get started, just click the button below to make an inquiry, or reach out to
+                                    us at
+                                    <span class="programs-links"><a href="mailto:outreach@indepthresearch.org">
+                                            outreach@indepthresearch.org</a></span> or call us at<span
+                                        class="programs-links">
+                                        <a href="tel:+254 715 077 817">+254 715 077 817</a></span>.
+                                </p>
+                                {{-- <a class="btn btn-danger-gradiant btn-md border-0 text-white mt-3 text-uppercase"
+									href="#"><span>join us now</span></a> --}}
+                                <div class="col-md-12 mt-3 text-center text-white">
+
+                                    <a class="btn bc-btn btn-primary rounded-pill py-3 fs-6 mr-2"
+                                        href="{{ route('contact') }}"
+                                        style="font-size: 1.125rem; line-height: 1.75rem; padding: 1rem 2rem; border-radius:999px; font-weight: 900"><span>Contact
+                                            Us</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Row -->
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div>
+                        <h2>Program can be taken together with:</h2>
+                        {!! $program->courses !!}
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+            {{-- end --}}
+        @endsection
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const buttons = document.querySelectorAll('.tab-button');
+                const panes = document.querySelectorAll('.tab-pane');
+
+                buttons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        panes.forEach(pane => pane.classList.remove('active'));
+
+                        button.classList.add('active');
+                        document.getElementById(button.dataset.tab).classList.add('active');
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                var $menu = $('#scroll_app_menu');
+                var $placeholder = $('.sticky-placeholder');
+                var menuOffset = $menu.offset().top;
+
+                $(window).scroll(function() {
+                    if ($(window).scrollTop() > menuOffset) {
+                        $placeholder.height($menu.outerHeight()).show();
+                        $menu.addClass('fixed-top');
+                    } else {
+                        $placeholder.hide();
+                        $menu.removeClass('fixed-top');
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('.nav-link-taps').on('click', function() {
+                    $('.nav-link-taps').removeClass('active');
+                    $(this).addClass('active');
+                });
+            });
+        </script>
+
+        <script>
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabContainer = button.parentElement;
+                    const contentContainer = document.querySelector('.tab-content');
+                    const targetTab = button.dataset.tab;
+
+                    // Deactivate all tabs
+                    tabContainer.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.classList.add('outline-inactive'); // Add outline to inactive tabs
+                    });
+
+                    // Hide all content
+                    contentContainer.querySelectorAll('.content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+
+                    // Activate clicked tab and corresponding content
+                    button.classList.add('active');
+                    button.classList.remove('outline-inactive'); // Remove outline from active tab
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+        </script>
+
+        {{-- script --}}
+        {{--
+			<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script> --}}
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous">
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var showMoreBtn = document.getElementById('show-more');
+                var showLessBtn = document.getElementById('show-less');
+                var shortDescription = document.getElementById('short-description');
+                var fullDescription = document.getElementById('full-description');
+
+                if (showMoreBtn && showLessBtn && shortDescription && fullDescription) {
+                    showMoreBtn.addEventListener('click', function() {
+                        shortDescription.style.display = 'none';
+                        fullDescription.style.display = 'inline';
+                        showMoreBtn.style.display = 'none';
+                        showLessBtn.style.display = 'inline';
+                    });
+
+                    showLessBtn.addEventListener('click', function() {
+                        shortDescription.style.display = 'inline';
+                        fullDescription.style.display = 'none';
+                        showMoreBtn.style.display = 'inline';
+                        showLessBtn.style.display = 'none';
+                    });
+                }
+            });
+        </script>

@@ -1,0 +1,32 @@
+# This is a sample build configuration for PHP.
+# Check our guides at https://confluence.atlassian.com/x/e8YWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: php:7.3
+
+pipelines:
+
+  default:
+
+  - step:
+      name: Build
+      script:
+        - apt-get update && apt-get install -y git && rm -r /var/lib/apt/lists/*
+        - git archive --format=tar.gz master -o ires-events.tar.gz
+      artifacts:
+        - ires-events.tar.gz
+
+  - step:
+      name: Deploy to production
+      deployment: production
+      caches:
+        - composer
+      script:
+        - pipe: atlassian/heroku-deploy:1.1.3
+          variables:
+            HEROKU_API_KEY: '20d410e6-8f7b-4b54-946a-d2efce7b6026'
+            HEROKU_APP_NAME: 'ires-events'
+            ZIP_FILE: 'ires-events.tar.gz'
+            # WAIT: '<boolean>' # Optional.
+            # DEBUG: '<boolean>' # Optional
