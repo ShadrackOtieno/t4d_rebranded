@@ -25,4 +25,4 @@ jobs:
           protocol: ftps
           # passive: true
           port: 21
-          local-dir: './'`
+          local-dir: './'
